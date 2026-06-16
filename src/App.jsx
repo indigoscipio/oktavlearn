@@ -39,15 +39,18 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-merino-50">
+    <div className="min-h-screen bg-merino-50 max-w-lg mx-auto relative">
       <header className="flex justify-between items-center px-5 py-4 border-b border-merino-200 bg-merino-50">
         <div className="flex items-center gap-2">
           <Columns3 size={20} className="text-brand-700" />
           <span className="text-sm font-semibold uppercase tracking-widest text-stone-800">OktavLearn</span>
         </div>
-        <div className="w-9 h-9 rounded-full border border-merino-200 flex items-center justify-center text-stone-500">
+        <button
+          onClick={() => setView('settings')}
+          className="w-9 h-9 rounded-full border border-merino-200 flex items-center justify-center text-stone-500 hover:text-brand-700 hover:border-brand-300 transition-colors"
+        >
           <User size={18} />
-        </div>
+        </button>
       </header>
       <main className="pb-16">{renderView()}</main>
       <Navigation view={view} setView={setView} />
