@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react'
 import { useStore } from '../store/StoreContext'
 import { getLatestSession, formatDate } from '../utils/helpers'
 
@@ -7,31 +8,31 @@ export default function ItemCard({ item, onSelect }) {
   const sessionCount = sessions.filter((s) => s.itemId === item.id).length
 
   return (
-    <div className="item-card" onClick={() => onSelect(item.id)}>
-      <div className="item-card-header">
-        <span className="item-type">{item.type}</span>
-        <div className="item-card-header-right">
-          <span className={`status-badge status-${item.status}`}>{item.status}</span>
+    <div
+      className="bg-merino-100 border border-merino-200 rounded-md p-4 cursor-pointer hover:shadow-md transition-shadow"
+      onClick={() => onSelect(item.id)}
+    >
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-xs font-semibold uppercase tracking-wider text-brand-700">{item.type}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium px-2 py-0.5 rounded bg-brand-50 text-brand-700">{item.status}</span>
           <button
-            className="btn-trash"
+            className="text-stone-400 hover:text-brand-700 transition-colors p-0.5"
             title="Delete"
             onClick={(e) => {
               e.stopPropagation()
               if (confirm(`Delete "${item.title}"?`)) deleteItem(item.id)
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"/>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            </svg>
+            <Trash2 size={14} />
           </button>
         </div>
       </div>
-      <h3>{item.title}</h3>
+      <h3 className="text-lg font-semibold text-stone-800 m-0">{item.title}</h3>
       {lastSession && (
-        <p className="item-meta">
-          {formatDate(lastSession.date)} &middot; {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'}
-          {lastSession.progress && ` \u2014 ${lastSession.progress}`}
+        <p className="text-sm text-stone-500 mt-1">
+          {formatDate(lastSession.date)} · {sessionCount} {sessionCount === 1 ? 'session' : 'sessions'}
+          {lastSession.progress && ` — ${lastSession.progress}`}
         </p>
       )}
     </div>

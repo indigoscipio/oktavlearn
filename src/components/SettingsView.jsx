@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useStore } from '../store/StoreContext'
 import { useToast } from '../store/ToastContext'
 import { formatDate } from '../utils/helpers'
+import { Download, Upload, Trash2 } from 'lucide-react'
 
 export default function SettingsView() {
   const { library, sessions, userName, exportData, importData, saveUserName, clearAllData } = useStore()
@@ -10,6 +11,17 @@ export default function SettingsView() {
   const [nameInput, setNameInput] = useState(userName)
   const [showClear, setShowClear] = useState(false)
   const [clearConfirm, setClearConfirm] = useState('')
+  const [theme, setTheme] = useState(() => localStorage.getItem('oktav_theme') || 'light')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('oktav_theme', theme)
+  }, [theme])
 
   const firstSession = sessions.length > 0
     ? sessions.slice().sort((a, b) => new Date(a.date) - new Date(b.date))[0]
@@ -66,81 +78,161 @@ export default function SettingsView() {
   }
 
   return (
-    <div className="view">
-      <h2>Settings</h2>
+    <div className="px-5 py-6 pb-24">
+      <h1 className="text-2xl font-bold text-stone-800 mb-1">Settings</h1>
+      <p className="text-sm text-stone-500 mb-6">Change your personal settings data here.</p>
 
-      <div className="form">
-        <h3>Display Name</h3>
-        <p className="muted">Customize your dashboard greeting.</p>
-        <div className="settings-name-row">
+      <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
+        <h3 className="text-base font-semibold text-stone-800 mb-2">Display Name</h3>
+        <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Your name"
+            placeholder="Enter your display name..."
             value={nameInput}
             onChange={(e) => setNameInput(e.target.value)}
+            className="flex-1 px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
           />
-          <button className="btn" onClick={handleSaveName}>Save</button>
+          <button
+            className="px-4 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
+            onClick={handleSaveName}
+          >
+            Save
+          </button>
         </div>
       </div>
 
-      <div className="data-card">
-        <h3>Your Data</h3>
-        <p className="data-card-row"><span>Library items</span><span>{library.length}</span></p>
-        <p className="data-card-row"><span>Sessions logged</span><span>{sessions.length}</span></p>
-        <p className="data-card-row"><span>First log</span><span>{firstSession ? formatDate(firstSession.date) : '—'}</span></p>
-        <p className="data-card-row"><span>Last log</span><span>{lastSession ? formatDate(lastSession.date) : '—'}</span></p>
-        <p className="data-card-row"><span>Storage used</span><span>{sizeStr}</span></p>
-        <p className="muted" style={{ marginTop: 8 }}>All data stored locally in your browser.</p>
+      <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
+        <h3 className="text-base font-semibold text-stone-800 mb-3">Your Data</h3>
+        <div className="flex flex-col gap-2 text-sm">
+          <div className="flex justify-between py-1.5 border-b border-merino-200">
+            <span className="text-stone-500">Library Items</span>
+            <span className="font-semibold text-stone-800">{library.length}</span>
+          </div>
+          <div className="flex justify-between py-1.5 border-b border-merino-200">
+            <span className="text-stone-500">Sessions Logged</span>
+            <span className="font-semibold text-stone-800">{sessions.length}</span>
+          </div>
+          <div className="flex justify-between py-1.5 border-b border-merino-200">
+            <span className="text-stone-500">First Log</span>
+            <span className="font-semibold text-stone-800">{firstSession ? formatDate(firstSession.date) : '—'}</span>
+          </div>
+          <div className="flex justify-between py-1.5 border-b border-merino-200">
+            <span className="text-stone-500">Last Log</span>
+            <span className="font-semibold text-stone-800">{lastSession ? formatDate(lastSession.date) : '—'}</span>
+          </div>
+          <div className="flex justify-between py-1.5">
+            <span className="text-stone-500">Storage Used</span>
+            <span className="font-semibold text-stone-800">{sizeStr}</span>
+          </div>
+        </div>
+        <p className="text-xs text-stone-400 italic mt-3">*All data stored locally in your browser.</p>
       </div>
 
-      <div className="form">
-        <h3>Export Data</h3>
-        <p className="muted">Download a backup of your library and sessions.</p>
-        <button className="btn" onClick={handleExport}>Export JSON</button>
+      <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
+        <h3 className="text-base font-semibold text-stone-800 mb-1">Export/Import Data</h3>
+        <p className="text-sm text-stone-500 mb-3">Don't forget to export and save your data to avoid losing.</p>
+        <div className="flex gap-2">
+          <button
+            className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gold-500 text-white text-sm font-medium rounded-sm hover:bg-gold-600 transition-colors"
+            onClick={handleExport}
+          >
+            <Download size={14} />
+            Export JSON
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".json"
+            onChange={handleImport}
+            className="hidden"
+          />
+          <button
+            className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-transparent text-gold-600 text-sm font-medium rounded-sm border border-gold-300 hover:bg-gold-50 transition-colors"
+            onClick={() => fileRef.current.click()}
+          >
+            <Upload size={14} />
+            Import JSON
+          </button>
+        </div>
       </div>
 
-      <div className="form">
-        <h3>Import Data</h3>
-        <p className="muted">Restore from a previously exported JSON file.</p>
-        <input
-          ref={fileRef}
-          type="file"
-          accept=".json"
-          onChange={handleImport}
-          style={{ display: 'none' }}
-        />
-        <button className="btn" onClick={() => fileRef.current.click()}>Import JSON</button>
-      </div>
-
-      <div className="form form-danger">
-        <h3>Clear All Data</h3>
-        <p className="muted">Permanently delete all library items and sessions.</p>
+      <div className="bg-merino-100 border-2 border-brand-700 rounded-md p-4 mb-4">
+        <h3 className="text-base font-semibold text-stone-800 mb-1">Clear All Data</h3>
+        <p className="text-sm text-stone-500 mb-3">Don't forget to export and save your data to avoid losing.</p>
         {!showClear ? (
-          <button className="btn btn-danger" onClick={() => setShowClear(true)}>Clear Everything</button>
+          <button
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
+            onClick={() => setShowClear(true)}
+          >
+            <Trash2 size={14} />
+            Clear All Data
+          </button>
         ) : (
           <div>
-            <p className="field-error" style={{ marginBottom: 6 }}>Type DELETE to confirm</p>
-            <div className="settings-name-row">
+            <p className="text-xs text-red-500 mb-2">Type DELETE to confirm</p>
+            <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Type DELETE"
                 value={clearConfirm}
                 onChange={(e) => setClearConfirm(e.target.value)}
+                className="flex-1 px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
               />
               <button
-                className="btn btn-danger"
+                className="px-4 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled={clearConfirm !== 'DELETE'}
                 onClick={handleClear}
               >
                 Confirm
               </button>
-              <button className="btn btn-outline" onClick={() => { setShowClear(false); setClearConfirm('') }}>Cancel</button>
+              <button
+                className="px-4 py-2 bg-transparent text-stone-600 text-sm font-medium rounded-sm border border-merino-200 hover:bg-merino-100 transition-colors"
+                onClick={() => { setShowClear(false); setClearConfirm('') }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         )}
       </div>
 
-      <p className="settings-footer">Oktav Learn v1.0 — No servers, no accounts. Your data stays on this device.</p>
+      <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
+        <h3 className="text-base font-semibold text-stone-800 mb-2">Appearance</h3>
+        <div className="flex gap-2">
+          <button
+            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
+              theme === 'light'
+                ? 'bg-stone-800 text-white border-stone-800'
+                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
+            }`}
+            onClick={() => setTheme('light')}
+          >
+            Light
+          </button>
+          <button
+            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
+              theme === 'dark'
+                ? 'bg-stone-800 text-white border-stone-800'
+                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
+            }`}
+            onClick={() => setTheme('dark')}
+          >
+            Dark
+          </button>
+          <button
+            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
+              theme === 'auto'
+                ? 'bg-stone-800 text-white border-stone-800'
+                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
+            }`}
+            onClick={() => setTheme('auto')}
+          >
+            Auto
+          </button>
+        </div>
+      </div>
+
+      <p className="text-center text-xs text-stone-400 mt-6">Oktav Learn v2.0 — No servers, no accounts. Your data stays on this device.</p>
     </div>
   )
 }

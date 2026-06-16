@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/StoreContext'
 import { getLatestSession } from '../utils/helpers'
+import { Plus, ArrowUpDown } from 'lucide-react'
 import AddItemForm from './AddItemForm'
 import ItemCard from './ItemCard'
 import EmptyState from './EmptyState'
@@ -29,40 +30,57 @@ export default function LibraryView({ setView }) {
 
   if (library.length === 0) {
     return (
-      <div className="view">
-        <h2>Library</h2>
+      <div className="px-5 py-6 pb-24">
+        <h1 className="text-2xl font-bold text-stone-800 mb-4">Library</h1>
         <EmptyState
           title="Your library is empty"
           message="Add your first book, article, video, or course to get started."
         />
-        <AddItemForm />
+        <div className="mt-4">
+          <AddItemForm />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="view">
-      <div className="library-header">
-        <h2>Library ({library.length})</h2>
-        <div className="library-header-actions">
-          <button className="btn-small" onClick={() => setSortBy(sortBy === 'alpha' ? 'recent' : 'alpha')}>
-            {sortBy === 'alpha' ? 'A-Z' : 'Recent'}
-          </button>
-          <button className="btn" onClick={() => setShowForm(!showForm)}>
-            {showForm ? '− Cancel' : '+ Add Item'}
-          </button>
-        </div>
+    <div className="px-5 py-6 pb-24">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-stone-800">Library ({library.length})</h1>
+        <button
+          className="flex items-center gap-1.5 px-3 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
+          onClick={() => setShowForm(!showForm)}
+        >
+          <Plus size={16} />
+          {showForm ? 'Cancel' : 'Add Item'}
+        </button>
       </div>
-      {showForm && <AddItemForm />}
+
+      {showForm && (
+        <div className="mb-4">
+          <AddItemForm />
+        </div>
+      )}
+
       {STATUS_ORDER.map((status) => {
         const items = sortItems(library.filter((i) => i.status === status))
         if (items.length === 0) return null
         return (
-          <div key={status} style={{ marginBottom: 16 }}>
-            <h3 className="section-header">
-              {STATUS_LABELS[status]} <span className="section-count">{items.length}</span>
-            </h3>
-            <div className="item-list">
+          <div key={status} className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-base font-semibold text-stone-800 flex items-center gap-2">
+                {STATUS_LABELS[status]}
+                <span className="text-xs font-medium px-2 py-0.5 rounded bg-merino-200 text-stone-600">{items.length}</span>
+              </h2>
+              <button
+                className="flex items-center gap-1 text-xs text-stone-500 hover:text-stone-700 transition-colors px-2 py-1 border border-merino-200 rounded-sm"
+                onClick={() => setSortBy(sortBy === 'alpha' ? 'recent' : 'alpha')}
+              >
+                <ArrowUpDown size={12} />
+                {sortBy === 'alpha' ? 'A-Z' : 'Recent'}
+              </button>
+            </div>
+            <div className="flex flex-col gap-2">
               {items.map((item) => (
                 <ItemCard
                   key={item.id}

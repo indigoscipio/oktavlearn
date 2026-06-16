@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useStore } from '../store/StoreContext'
 import { useToast } from '../store/ToastContext'
+import { Clock, CalendarDays, BookOpen } from 'lucide-react'
 import {
   getWeekStart,
   totalHours,
@@ -54,99 +55,109 @@ export default function DashboardView({ setView }) {
 
   if (library.length === 0) {
     return (
-      <div className="view">
-        <h2>{greeting}</h2>
-        <div className="guided-flow">
-          <h3>Welcome to Oktav Learn!</h3>
-          <p>Track your study sessions and watch your progress grow.</p>
-          <p>Start by adding your first item:</p>
+      <div className="px-5 py-6 pb-24">
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{greeting}</h1>
+        <div className="bg-merino-100 border border-merino-200 rounded-md p-6 mt-4 text-center">
+          <h3 className="text-lg font-semibold text-stone-800 mb-1">Welcome to Oktav Learn!</h3>
+          <p className="text-sm text-stone-500 mb-4">Track your study sessions and watch your progress grow.</p>
+          <p className="text-sm text-stone-500 mb-4">Start by adding your first item:</p>
           <AddItemForm />
-          <p className="muted" style={{ marginTop: 12 }}>After that, log your first session right here on the dashboard.</p>
+          <p className="text-sm text-stone-400 mt-3">After that, log your first session right here on the dashboard.</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="view">
-      <h2>{greeting}</h2>
-      <form className="quick-log" onSubmit={handleQuickLog}>
+    <div className="px-5 py-6 pb-24">
+      <h1 className="text-2xl font-bold text-stone-800 mb-1">{greeting}</h1>
+      <p className="text-sm text-stone-500 mb-4">
+        {activeCount} Active · {completedCount} Completed
+      </p>
+
+      <form className="bg-merino-100 border border-merino-200 rounded-md p-3 mb-4" onSubmit={handleQuickLog}>
         <select
           value={quickItemId}
           onChange={(e) => setQuickItemId(e.target.value)}
           required
           autoFocus
+          className="w-full px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 mb-2"
         >
           <option value="" disabled>Select item</option>
           {library.map((item) => (
             <option key={item.id} value={item.id}>{item.title}</option>
           ))}
         </select>
-        <div className="quick-log-row">
-          <input
-            type="number"
-            min="1"
-            placeholder="Minutes"
-            value={quickDuration}
-            onChange={(e) => setQuickDuration(e.target.value)}
-            required
-          />
-          <button className="btn" type="submit">Log</button>
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Clock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+            <input
+              type="number"
+              min="1"
+              placeholder="Insert Minutes"
+              value={quickDuration}
+              onChange={(e) => setQuickDuration(e.target.value)}
+              required
+              className="w-full pl-8 pr-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-5 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
+          >
+            Log
+          </button>
         </div>
       </form>
 
-      <div className="week-dots">
-        {weekDays.map((date, i) => (
-          <div key={date} className="week-dot-col">
-            <span className="week-label">{dayLabels[i]}</span>
-            <span className={`week-dot${sessionDates.has(date) ? ' filled' : ''}`} />
-          </div>
-        ))}
-      </div>
-
-      <div className="stats-row">
-        <div className="stat-card">
-          <span className="stat-value">{formatDuration(total * 60)}</span>
-          <span className="stat-label">Total</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-value">{formatDuration(weekHours * 60)}</span>
-          <span className="stat-label">This Week</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-value">{weekSessions.length}</span>
-          <span className="stat-label">Sessions</span>
+      <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
+        <div className="flex justify-between">
+          {weekDays.map((date, i) => (
+            <div key={date} className="flex flex-col items-center gap-1.5">
+              <span className="text-xs font-medium uppercase tracking-wide text-stone-500">{dayLabels[i]}</span>
+              <span className={`w-3 h-3 rounded-full border-2 ${
+                sessionDates.has(date)
+                  ? 'bg-brand-700 border-brand-700'
+                  : 'bg-transparent border-stone-300'
+              }`} />
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="stats-row">
-        <div className="stat-card">
-          <span className="stat-value">{activeCount}</span>
-          <span className="stat-label">Active</span>
+      <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="bg-merino-100 border border-merino-200 rounded-md p-3 text-center">
+          <Clock size={18} className="mx-auto text-stone-400 mb-1" />
+          <span className="block text-lg font-bold text-stone-800">{formatDuration(total * 60)}</span>
+          <span className="block text-xs text-stone-500">Total</span>
         </div>
-        <div className="stat-card">
-          <span className="stat-value">{completedCount}</span>
-          <span className="stat-label">Completed</span>
+        <div className="bg-merino-100 border border-merino-200 rounded-md p-3 text-center">
+          <CalendarDays size={18} className="mx-auto text-stone-400 mb-1" />
+          <span className="block text-lg font-bold text-stone-800">{formatDuration(weekHours * 60)}</span>
+          <span className="block text-xs text-stone-500">This Week</span>
+        </div>
+        <div className="bg-merino-100 border border-merino-200 rounded-md p-3 text-center">
+          <BookOpen size={18} className="mx-auto text-stone-400 mb-1" />
+          <span className="block text-lg font-bold text-stone-800">{weekSessions.length}</span>
+          <span className="block text-xs text-stone-500">Sessions</span>
         </div>
       </div>
 
       {recent.length > 0 && (
         <>
-          <h3>Recently Studied</h3>
-          <div className="item-list">
+          <h2 className="text-lg font-semibold text-stone-800 mb-2">Recently Studied</h2>
+          <div className="flex flex-col gap-2">
             {recent.map(({ item, lastSession }) => (
               <div
                 key={item.id}
-                className="item-card"
+                className="bg-merino-100 border border-merino-200 rounded-md p-4 cursor-pointer hover:shadow-md transition-shadow"
                 onClick={() => setView(`item-${item.id}`)}
               >
-                <div className="item-card-header">
-                  <span className="item-type">{item.type}</span>
-                </div>
-                <h3>{item.title}</h3>
-                <p className="item-meta">
-                  {formatDate(lastSession.date)} &middot; {lastSession.progress}
-                  {lastSession.whatStuck && ` \u2014 ${lastSession.whatStuck}`}
+                <span className="text-xs font-semibold uppercase tracking-wider text-brand-700">{item.type}</span>
+                <h3 className="text-lg font-semibold text-stone-800 m-0 mt-1">{item.title}</h3>
+                <p className="text-sm text-stone-500 mt-1">
+                  {formatDate(lastSession.date)}
+                  {lastSession.progress && ` · ${lastSession.progress}`}
                 </p>
               </div>
             ))}
