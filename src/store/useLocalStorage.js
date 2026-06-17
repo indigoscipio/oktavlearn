@@ -4,6 +4,7 @@ import { generateId, nowISO } from '../utils/helpers'
 const LIBRARY_KEY = 'oktav_library'
 const SESSIONS_KEY = 'oktav_sessions'
 const NAME_KEY = 'oktav_name'
+const LAST_EXPORT_KEY = 'oktav_last_exported_at'
 
 function load(key, fallback) {
   try {
@@ -22,6 +23,7 @@ export function useLocalStorage() {
   const [library, setLibrary] = useState(() => load(LIBRARY_KEY, []))
   const [sessions, setSessions] = useState(() => load(SESSIONS_KEY, []))
   const [userName, setUserName] = useState(() => load(NAME_KEY, ''))
+  const [lastExportedAt, setLastExportedAt] = useState(() => load(LAST_EXPORT_KEY, ''))
 
   const persistLibrary = useCallback((fn) => {
     setLibrary((prev) => {
@@ -82,7 +84,10 @@ export function useLocalStorage() {
   }, [persistSessions])
 
   const exportData = useCallback(() => {
-    return JSON.stringify({ library, sessions }, null, 2)
+    const exportedAt = nowISO()
+    save(LAST_EXPORT_KEY, exportedAt)
+    setLastExportedAt(exportedAt)
+    return JSON.stringify({ version: '2.2', exportedAt, library, sessions }, null, 2)
   }, [library, sessions])
 
   const saveUserName = useCallback((name) => {
@@ -108,6 +113,7 @@ export function useLocalStorage() {
     library,
     sessions,
     userName,
+    lastExportedAt,
     addItem,
     editItem,
     deleteItem,

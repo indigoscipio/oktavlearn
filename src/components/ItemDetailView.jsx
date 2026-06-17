@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { useStore } from '../store/StoreContext'
 import { useToast } from '../store/ToastContext'
 import { formatDate, formatDuration, getItemSessions, getLatestSession } from '../utils/helpers'
-import { ChevronLeft, Pencil, Clock, CalendarDays, BookOpen, Plus } from 'lucide-react'
+import { ChevronLeft, Pencil, Clock, CalendarDays, BookOpen, Plus, Trash2 } from 'lucide-react'
 import LogSessionForm from './LogSessionForm'
 import SessionHistory from './SessionHistory'
 
 export default function ItemDetailView({ itemId, setView }) {
-  const { library, sessions, editItem, setItemStatus } = useStore()
+  const { library, sessions, editItem, setItemStatus, deleteItem } = useStore()
   const { showToast } = useToast()
   const item = library.find((i) => i.id === itemId)
 
@@ -31,6 +31,7 @@ export default function ItemDetailView({ itemId, setView }) {
 
   const itemSessions = getItemSessions(sessions, item.id)
   const lastSession = getLatestSession(sessions, item.id)
+  const sessionLabel = `${itemSessions.length} ${itemSessions.length === 1 ? 'session' : 'sessions'}`
   const statusBadgeClass = item.status === 'completed'
     ? 'bg-brand-50 text-brand-800 border-brand-300 dark:bg-brand-950 dark:text-brand-100 dark:border-brand-500'
     : 'bg-gold-100 text-gold-800 border-gold-400 dark:bg-gold-900 dark:text-gold-100 dark:border-gold-500'
@@ -64,6 +65,13 @@ export default function ItemDetailView({ itemId, setView }) {
     }
   }
 
+  function handleDeleteItem() {
+    if (!confirm(`Delete "${item.title}" and its ${sessionLabel}? This cannot be undone.`)) return
+    deleteItem(item.id)
+    showToast('Item deleted!')
+    setView('library')
+  }
+
   return (
     <div className="px-5 py-6 pb-24">
       <button
@@ -94,10 +102,20 @@ export default function ItemDetailView({ itemId, setView }) {
             <h1 className="text-2xl font-bold text-stone-800 cursor-pointer border-b border-dashed border-merino-200 hover:border-brand-700 transition-colors" onClick={startEdit}>
               {item.title}
             </h1>
-            <button className="flex items-center gap-1 text-xs font-medium border border-merino-200 rounded-sm px-2 py-1 hover:bg-merino-100 transition-colors" onClick={startEdit}>
-              <Pencil size={12} />
-              Edit
-            </button>
+            <div className="flex items-center gap-2">
+              <button className="flex items-center gap-1 text-xs font-medium border border-merino-200 rounded-sm px-2 py-1 hover:bg-merino-100 transition-colors" onClick={startEdit}>
+                <Pencil size={12} />
+                Edit
+              </button>
+              <button
+                className="flex items-center justify-center text-brand-700 border border-brand-300 rounded-sm p-1 hover:bg-brand-50 transition-colors"
+                title="Delete library item"
+                aria-label="Delete library item"
+                onClick={handleDeleteItem}
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
           </>
         )}
       </div>

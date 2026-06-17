@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useStore } from '../store/StoreContext'
 import { useToast } from '../store/ToastContext'
 import { Clock, CalendarDays, BookOpen } from 'lucide-react'
@@ -9,28 +9,39 @@ import {
   sessionsThisWeek,
   getRecentItems,
   formatDuration,
-  formatDate,
   todayISO,
   getTimeOfDay,
 } from '../utils/helpers'
 import AddItemForm from './AddItemForm'
+import ItemCard from './ItemCard'
 
 export default function DashboardView({ setView }) {
   const { library, sessions, addSession, userName } = useStore()
   const { showToast } = useToast()
-  const [quickItemId, setQuickItemId] = useState(library[0]?.id || '')
+  const activeItems = library.filter((i) => i.status === 'active')
+  const [quickItemId, setQuickItemId] = useState(activeItems[0]?.id || '')
   const [quickDuration, setQuickDuration] = useState('')
 
   const total = totalHours(sessions)
   const weekSessions = sessionsThisWeek(sessions)
   const weekHours = hoursThisWeek(sessions)
   const recent = getRecentItems(library, sessions)
-  const activeCount = library.filter((i) => i.status === 'active').length
+  const activeCount = activeItems.length
   const completedCount = library.filter((i) => i.status === 'completed').length
+
+  useEffect(() => {
+    if (activeItems.length === 0) {
+      if (quickItemId) setQuickItemId('')
+      return
+    }
+    if (!activeItems.some((item) => item.id === quickItemId)) {
+      setQuickItemId(activeItems[0].id)
+    }
+  }, [activeItems, quickItemId])
 
   function handleQuickLog(e) {
     e.preventDefault()
-    if (!quickItemId || !quickDuration) return
+    if (activeItems.length === 0 || !quickItemId || !quickDuration) return
     addSession({
       itemId: quickItemId,
       date: todayISO(),
@@ -81,13 +92,17 @@ export default function DashboardView({ setView }) {
           onChange={(e) => setQuickItemId(e.target.value)}
           required
           autoFocus
+          disabled={activeItems.length === 0}
           className="w-full px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 mb-2"
         >
-          <option value="" disabled>Select item</option>
-          {library.map((item) => (
+          <option value="" disabled>{activeItems.length === 0 ? 'No active items' : 'Select item'}</option>
+          {activeItems.map((item) => (
             <option key={item.id} value={item.id}>{item.title}</option>
           ))}
         </select>
+        {activeItems.length === 0 && (
+          <p className="text-xs text-stone-500 mb-2">Reopen an item or add a new active item to quick log.</p>
+        )}
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Clock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
@@ -98,12 +113,14 @@ export default function DashboardView({ setView }) {
               value={quickDuration}
               onChange={(e) => setQuickDuration(e.target.value)}
               required
+              disabled={activeItems.length === 0}
               className="w-full pl-8 pr-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
             />
           </div>
           <button
             type="submit"
-            className="px-5 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
+            disabled={activeItems.length === 0}
+            className="px-5 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Log
           </button>
@@ -147,19 +164,13 @@ export default function DashboardView({ setView }) {
         <>
           <h2 className="text-lg font-semibold text-stone-800 mb-2">Recently Studied</h2>
           <div className="flex flex-col gap-2">
-            {recent.map(({ item, lastSession }) => (
-              <div
+            {recent.map(({ item }) => (
+              <ItemCard
                 key={item.id}
-                className="bg-merino-100 border border-merino-200 rounded-md p-4 cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => setView(`item-${item.id}`)}
-              >
-                <span className="text-xs font-semibold uppercase tracking-wider text-brand-700">{item.type}</span>
-                <h3 className="text-lg font-semibold text-stone-800 m-0 mt-1">{item.title}</h3>
-                <p className="text-sm text-stone-500 mt-1">
-                  {formatDate(lastSession.date)}
-                  {lastSession.progress && ` · ${lastSession.progress}`}
-                </p>
-              </div>
+                item={item}
+                onSelect={(id) => setView(`item-${id}`)}
+                showDelete={false}
+              />
             ))}
           </div>
         </>

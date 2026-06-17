@@ -5,7 +5,7 @@ import { formatDate } from '../utils/helpers'
 import { Download, Upload, Trash2 } from 'lucide-react'
 
 export default function SettingsView() {
-  const { library, sessions, userName, exportData, importData, saveUserName, clearAllData } = useStore()
+  const { library, sessions, userName, lastExportedAt, exportData, importData, saveUserName, clearAllData } = useStore()
   const { showToast } = useToast()
   const fileRef = useRef(null)
   const [nameInput, setNameInput] = useState(userName)
@@ -41,11 +41,12 @@ export default function SettingsView() {
     a.download = `oktav-learn-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
-    showToast('Data exported!')
+    showToast(`Exported ${library.length} items and ${sessions.length} sessions.`)
   }
 
   function handleImport(e) {
-    const file = e.target.files[0]
+    const input = e.target
+    const file = input.files[0]
     if (!file) return
     const reader = new FileReader()
     reader.onload = (event) => {
@@ -53,12 +54,15 @@ export default function SettingsView() {
         const data = JSON.parse(event.target.result)
         if (!Array.isArray(data.library) || !Array.isArray(data.sessions)) {
           showToast('Invalid file format.', 'error')
+          input.value = ''
           return
         }
         importData(data)
-        showToast('Data imported!')
+        showToast(`Imported ${data.library.length} items and ${data.sessions.length} sessions.`)
+        input.value = ''
       } catch {
         showToast('Invalid JSON file.', 'error')
+        input.value = ''
       }
     }
     reader.readAsText(file)
@@ -119,6 +123,10 @@ export default function SettingsView() {
           <div className="flex justify-between py-1.5 border-b border-merino-200">
             <span className="text-stone-500">Last Log</span>
             <span className="font-semibold text-stone-800">{lastSession ? formatDate(lastSession.date) : '—'}</span>
+          </div>
+          <div className="flex justify-between py-1.5 border-b border-merino-200">
+            <span className="text-stone-500">Last Export</span>
+            <span className="font-semibold text-stone-800">{lastExportedAt ? formatDate(lastExportedAt) : 'Never'}</span>
           </div>
           <div className="flex justify-between py-1.5">
             <span className="text-stone-500">Storage Used</span>
