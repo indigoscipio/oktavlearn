@@ -25,6 +25,67 @@
 }
 
 @layer utilities {
+  .dark .bg-merino-50 {
+    background-color: #1C1917;
+  }
+
+  .dark .bg-merino-100 {
+    background-color: #292524;
+  }
+
+  .dark .bg-merino-200 {
+    background-color: #44403C;
+  }
+
+  .dark .bg-white {
+    background-color: #0C0A09;
+  }
+
+  .dark .border-merino-200 {
+    border-color: #44403C;
+  }
+
+  .dark .border-merino-300 {
+    border-color: #57534E;
+  }
+
+  .dark .text-stone-800 {
+    color: #F5F5F4;
+  }
+
+  .dark .text-stone-700,
+  .dark .text-stone-600 {
+    color: #D6D3D1;
+  }
+
+  .dark .text-stone-500 {
+    color: #A8A29E;
+  }
+
+  .dark .text-stone-400 {
+    color: #78716C;
+  }
+
+  .dark .text-brand-700 {
+    color: #F6B2AB;
+  }
+
+  .dark .bg-brand-50 {
+    background-color: #41130E;
+  }
+
+  .dark input::placeholder {
+    color: #78716C;
+  }
+
+  .dark .hover\:bg-merino-100:hover {
+    background-color: #44403C;
+  }
+
+  .dark .hover\:bg-gold-50:hover {
+    background-color: #34230F;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.2s ease-in;
   }

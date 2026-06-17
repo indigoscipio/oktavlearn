@@ -12,7 +12,7 @@ function AppContent() {
   const [view, setView] = useState('dashboard')
 
   useEffect(() => {
-    const saved = localStorage.getItem('oktav_theme') || 'light'
+    const saved = localStorage.getItem('oktav_theme') === 'dark' ? 'dark' : 'light'
     document.documentElement.setAttribute('data-theme', saved)
     if (saved === 'dark') {
       document.documentElement.classList.add('dark')

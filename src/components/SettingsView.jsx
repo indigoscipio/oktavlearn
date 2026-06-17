@@ -11,7 +11,7 @@ export default function SettingsView() {
   const [nameInput, setNameInput] = useState(userName)
   const [showClear, setShowClear] = useState(false)
   const [clearConfirm, setClearConfirm] = useState('')
-  const [theme, setTheme] = useState(() => localStorage.getItem('oktav_theme') || 'light')
+  const [theme, setTheme] = useState(() => localStorage.getItem('oktav_theme') === 'dark' ? 'dark' : 'light')
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -202,8 +202,8 @@ export default function SettingsView() {
           <button
             className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
               theme === 'light'
-                ? 'bg-stone-800 text-white border-stone-800'
-                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
+                ? 'bg-brand-700 text-white border-brand-700 shadow-sm'
+                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100 dark:bg-stone-900 dark:text-stone-300 dark:border-stone-700'
             }`}
             onClick={() => setTheme('light')}
           >
@@ -212,22 +212,12 @@ export default function SettingsView() {
           <button
             className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
               theme === 'dark'
-                ? 'bg-stone-800 text-white border-stone-800'
-                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
+                ? 'bg-brand-700 text-white border-brand-700 shadow-sm'
+                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100 dark:bg-stone-900 dark:text-stone-300 dark:border-stone-700'
             }`}
             onClick={() => setTheme('dark')}
           >
             Dark
-          </button>
-          <button
-            className={`flex-1 px-4 py-2.5 text-sm font-medium rounded-sm border transition-colors ${
-              theme === 'auto'
-                ? 'bg-stone-800 text-white border-stone-800'
-                : 'bg-transparent text-stone-600 border-merino-200 hover:bg-merino-100'
-            }`}
-            onClick={() => setTheme('auto')}
-          >
-            Auto
           </button>
         </div>
       </div>

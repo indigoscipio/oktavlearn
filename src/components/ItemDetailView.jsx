@@ -31,6 +31,9 @@ export default function ItemDetailView({ itemId, setView }) {
 
   const itemSessions = getItemSessions(sessions, item.id)
   const lastSession = getLatestSession(sessions, item.id)
+  const statusBadgeClass = item.status === 'completed'
+    ? 'bg-brand-50 text-brand-800 border-brand-300 dark:bg-brand-950 dark:text-brand-100 dark:border-brand-500'
+    : 'bg-gold-100 text-gold-800 border-gold-400 dark:bg-gold-900 dark:text-gold-100 dark:border-gold-500'
   const totalMins = itemSessions.reduce((sum, s) => sum + s.duration, 0)
   const weekStart = new Date()
   weekStart.setDate(weekStart.getDate() - weekStart.getDay() + (weekStart.getDay() === 0 ? -6 : 1))
@@ -104,7 +107,7 @@ export default function ItemDetailView({ itemId, setView }) {
       </p>
 
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-xs font-medium px-2 py-0.5 rounded bg-brand-50 text-brand-700">{item.status}</span>
+        <span className={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded border ${statusBadgeClass}`}>{item.status}</span>
         <button
           className="px-3 py-1.5 text-xs font-medium bg-brand-700 text-white rounded-sm hover:bg-brand-800 transition-colors"
           onClick={toggleCompleted}

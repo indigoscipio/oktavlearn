@@ -6,6 +6,9 @@ export default function ItemCard({ item, onSelect }) {
   const { sessions, deleteItem } = useStore()
   const lastSession = getLatestSession(sessions, item.id)
   const sessionCount = sessions.filter((s) => s.itemId === item.id).length
+  const statusBadgeClass = item.status === 'completed'
+    ? 'bg-brand-50 text-brand-800 border-brand-300 dark:bg-brand-950 dark:text-brand-100 dark:border-brand-500'
+    : 'bg-gold-100 text-gold-800 border-gold-400 dark:bg-gold-900 dark:text-gold-100 dark:border-gold-500'
 
   return (
     <div
@@ -15,7 +18,7 @@ export default function ItemCard({ item, onSelect }) {
       <div className="flex justify-between items-center mb-1">
         <span className="text-xs font-semibold uppercase tracking-wider text-brand-700">{item.type}</span>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium px-2 py-0.5 rounded bg-brand-50 text-brand-700">{item.status}</span>
+          <span className={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded border ${statusBadgeClass}`}>{item.status}</span>
           <button
             className="text-stone-400 hover:text-brand-700 transition-colors p-0.5"
             title="Delete"
