@@ -8,7 +8,7 @@ const TABS = [
 
 export default function Navigation({ view, setView }) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-merino-50 border-t border-merino-200 flex z-50">
+    <nav className="fixed bottom-0 left-1/2 right-auto w-full max-w-lg -translate-x-1/2 bg-merino-50 border-t border-merino-200 flex z-50">
       {TABS.map((tab) => {
         const active = view === tab.key
         const Icon = tab.icon

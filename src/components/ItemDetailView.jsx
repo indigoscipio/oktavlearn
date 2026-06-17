@@ -137,7 +137,7 @@ export default function ItemDetailView({ itemId, setView }) {
       >
         {showLogForm ? 'Hide Form' : (
           <>
-            Add Item
+            Log Session
             <Plus size={16} />
           </>
         )}

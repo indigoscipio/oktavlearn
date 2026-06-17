@@ -47,6 +47,7 @@ function AppContent() {
         </div>
         <button
           onClick={() => setView('settings')}
+          aria-label="Open settings"
           className="w-9 h-9 rounded-full border border-merino-200 flex items-center justify-center text-stone-500 hover:text-brand-700 hover:border-brand-300 transition-colors"
         >
           <User size={18} />

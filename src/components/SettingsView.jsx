@@ -51,7 +51,7 @@ export default function SettingsView() {
     reader.onload = (event) => {
       try {
         const data = JSON.parse(event.target.result)
-        if (!data.library || !data.sessions) {
+        if (!Array.isArray(data.library) || !Array.isArray(data.sessions)) {
           showToast('Invalid file format.', 'error')
           return
         }
@@ -80,7 +80,7 @@ export default function SettingsView() {
   return (
     <div className="px-5 py-6 pb-24">
       <h1 className="text-2xl font-bold text-stone-800 mb-1">Settings</h1>
-      <p className="text-sm text-stone-500 mb-6">Change your personal settings data here.</p>
+      <p className="text-sm text-stone-500 mb-6">Manage your profile, backups, and local data.</p>
 
       <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
         <h3 className="text-base font-semibold text-stone-800 mb-2">Display Name</h3>
@@ -130,7 +130,7 @@ export default function SettingsView() {
 
       <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
         <h3 className="text-base font-semibold text-stone-800 mb-1">Export/Import Data</h3>
-        <p className="text-sm text-stone-500 mb-3">Don't forget to export and save your data to avoid losing.</p>
+        <p className="text-sm text-stone-500 mb-3">Export a backup or restore a previous JSON file.</p>
         <div className="flex gap-2">
           <button
             className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gold-500 text-white text-sm font-medium rounded-sm hover:bg-gold-600 transition-colors"
@@ -158,7 +158,7 @@ export default function SettingsView() {
 
       <div className="bg-merino-100 border-2 border-brand-700 rounded-md p-4 mb-4">
         <h3 className="text-base font-semibold text-stone-800 mb-1">Clear All Data</h3>
-        <p className="text-sm text-stone-500 mb-3">Don't forget to export and save your data to avoid losing.</p>
+        <p className="text-sm text-stone-500 mb-3">This permanently removes your local library and sessions from this browser.</p>
         {!showClear ? (
           <button
             className="flex items-center gap-1.5 px-4 py-2.5 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
