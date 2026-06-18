@@ -70,10 +70,32 @@ export default function DashboardView({ setView }) {
         <h1 className="text-2xl font-bold text-stone-800 mb-1">{greeting}</h1>
         <div className="bg-merino-100 border border-merino-200 rounded-md p-6 mt-4 text-center">
           <h3 className="text-lg font-semibold text-stone-800 mb-1">Welcome to Pliny!</h3>
-          <p className="text-sm text-stone-500 mb-4">Track your study sessions and watch your progress grow.</p>
-          <p className="text-sm text-stone-500 mb-4">Start by adding your first item:</p>
+          <p className="text-sm text-stone-500 mb-5">A private study logbook for what you read, watch, and learn.</p>
+          <div className="grid gap-2 text-left mb-5">
+            <div className="flex gap-3 bg-merino-50 border border-merino-200 rounded-sm p-3">
+              <span className="text-sm font-semibold text-gold-700">1</span>
+              <div>
+                <p className="text-sm font-semibold text-stone-800">Add what you study</p>
+                <p className="text-xs text-stone-500">Books, articles, videos, or courses.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 bg-merino-50 border border-merino-200 rounded-sm p-3">
+              <span className="text-sm font-semibold text-gold-700">2</span>
+              <div>
+                <p className="text-sm font-semibold text-stone-800">Log each session</p>
+                <p className="text-xs text-stone-500">Record minutes, progress, and what stuck.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 bg-merino-50 border border-merino-200 rounded-sm p-3">
+              <span className="text-sm font-semibold text-gold-700">3</span>
+              <div>
+                <p className="text-sm font-semibold text-stone-800">Export a backup</p>
+                <p className="text-xs text-stone-500">Your data stays local, so keep a copy.</p>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-stone-500 mb-4">Start by adding your first library item:</p>
           <AddItemForm />
-          <p className="text-sm text-stone-400 mt-3">After that, log your first session right here on the dashboard.</p>
         </div>
       </div>
     )

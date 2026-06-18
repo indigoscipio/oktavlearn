@@ -74,9 +74,10 @@ export default function SettingsView() {
   }
 
   function handleClear() {
-    if (clearConfirm !== 'DELETE') return
+    if (clearConfirm !== 'RESET') return
     clearAllData()
-    showToast('All data cleared!')
+    setNameInput('')
+    showToast('Study data reset.')
     setShowClear(false)
     setClearConfirm('')
   }
@@ -139,6 +140,11 @@ export default function SettingsView() {
       <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
         <h3 className="text-base font-semibold text-stone-800 mb-1">Export/Import Data</h3>
         <p className="text-sm text-stone-500 mb-3">Export a backup or restore a previous JSON file.</p>
+        {!lastExportedAt && (
+          <p className="text-sm text-gold-700 bg-gold-50 border border-gold-200 rounded-sm px-3 py-2 mb-3">
+            You have not exported a backup yet. Pliny stores data only in this browser.
+          </p>
+        )}
         <div className="flex gap-2">
           <button
             className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 bg-gold-500 text-white text-sm font-medium rounded-sm hover:bg-gold-600 transition-colors"
@@ -165,30 +171,30 @@ export default function SettingsView() {
       </div>
 
       <div className="bg-merino-100 border-2 border-brand-700 rounded-md p-4 mb-4">
-        <h3 className="text-base font-semibold text-stone-800 mb-1">Clear All Data</h3>
-        <p className="text-sm text-stone-500 mb-3">This permanently removes your local library and sessions from this browser.</p>
+        <h3 className="text-base font-semibold text-stone-800 mb-1">Reset Study Data</h3>
+        <p className="text-sm text-stone-500 mb-3">This removes your library, sessions, display name, and backup history from this browser. Your theme preference stays unchanged.</p>
         {!showClear ? (
           <button
             className="flex items-center gap-1.5 px-4 py-2.5 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors"
             onClick={() => setShowClear(true)}
           >
             <Trash2 size={14} />
-            Clear All Data
+            Reset Study Data
           </button>
         ) : (
           <div>
-            <p className="text-xs text-red-500 mb-2">Type DELETE to confirm</p>
+            <p className="text-xs text-red-500 mb-2">Type RESET to confirm</p>
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Type DELETE"
+                placeholder="Type RESET"
                 value={clearConfirm}
                 onChange={(e) => setClearConfirm(e.target.value)}
                 className="flex-1 px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
               />
               <button
                 className="px-4 py-2 bg-brand-700 text-white text-sm font-medium rounded-sm hover:bg-brand-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                disabled={clearConfirm !== 'DELETE'}
+                disabled={clearConfirm !== 'RESET'}
                 onClick={handleClear}
               >
                 Confirm
@@ -230,7 +236,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.3 — No servers, no accounts. Your data stays on this device.</p>
+      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.4 — No servers, no accounts. Your data stays on this device.</p>
     </div>
   )
 }

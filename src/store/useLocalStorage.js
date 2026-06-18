@@ -87,7 +87,7 @@ export function useLocalStorage() {
     const exportedAt = nowISO()
     save(LAST_EXPORT_KEY, exportedAt)
     setLastExportedAt(exportedAt)
-    return JSON.stringify({ version: '2.2', exportedAt, library, sessions }, null, 2)
+    return JSON.stringify({ version: '2.4', exportedAt, library, sessions }, null, 2)
   }, [library, sessions])
 
   const saveUserName = useCallback((name) => {
@@ -98,8 +98,12 @@ export function useLocalStorage() {
   const clearAllData = useCallback(() => {
     localStorage.removeItem(LIBRARY_KEY)
     localStorage.removeItem(SESSIONS_KEY)
+    localStorage.removeItem(NAME_KEY)
+    localStorage.removeItem(LAST_EXPORT_KEY)
     setLibrary([])
     setSessions([])
+    setUserName('')
+    setLastExportedAt('')
   }, [])
 
   const importData = useCallback((data) => {

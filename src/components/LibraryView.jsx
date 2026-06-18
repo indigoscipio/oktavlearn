@@ -34,8 +34,12 @@ export default function LibraryView({ setView }) {
         <h1 className="text-2xl font-bold text-stone-800 mb-4">Library</h1>
         <EmptyState
           title="Your library is empty"
-          message="Add your first book, article, video, or course to get started."
+          message="Add anything you are actively studying: a book, article, video, course, or paper."
         />
+        <div className="bg-merino-100 border border-merino-200 rounded-md p-4 text-sm text-stone-500">
+          <p className="font-semibold text-stone-800 mb-1">What belongs here?</p>
+          <p>Use library items as containers for your study sessions. Each item gets its own history, progress notes, and totals.</p>
+        </div>
         <div className="mt-4">
           <AddItemForm />
         </div>
