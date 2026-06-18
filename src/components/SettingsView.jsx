@@ -38,7 +38,7 @@ export default function SettingsView() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `oktav-learn-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `pliny-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(url)
     showToast(`Exported ${library.length} items and ${sessions.length} sessions.`)
@@ -230,7 +230,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      <p className="text-center text-xs text-stone-400 mt-6">Oktav Learn v2.0 — No servers, no accounts. Your data stays on this device.</p>
+      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.3 — No servers, no accounts. Your data stays on this device.</p>
     </div>
   )
 }

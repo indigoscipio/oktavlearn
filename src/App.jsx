@@ -43,7 +43,7 @@ function AppContent() {
       <header className="flex justify-between items-center px-5 py-4 border-b border-merino-200 bg-merino-50">
         <div className="flex items-center gap-2">
           <Columns3 size={20} className="text-brand-700" />
-          <span className="text-sm font-semibold uppercase tracking-widest text-stone-800">OktavLearn</span>
+          <span className="text-sm font-semibold uppercase tracking-widest text-stone-800">Pliny</span>
         </div>
         <button
           onClick={() => setView('settings')}

@@ -69,7 +69,7 @@ export default function DashboardView({ setView }) {
       <div className="px-5 py-6 pb-24">
         <h1 className="text-2xl font-bold text-stone-800 mb-1">{greeting}</h1>
         <div className="bg-merino-100 border border-merino-200 rounded-md p-6 mt-4 text-center">
-          <h3 className="text-lg font-semibold text-stone-800 mb-1">Welcome to Oktav Learn!</h3>
+          <h3 className="text-lg font-semibold text-stone-800 mb-1">Welcome to Pliny!</h3>
           <p className="text-sm text-stone-500 mb-4">Track your study sessions and watch your progress grow.</p>
           <p className="text-sm text-stone-500 mb-4">Start by adding your first item:</p>
           <AddItemForm />
