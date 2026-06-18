@@ -6,7 +6,7 @@ import DashboardView from './components/DashboardView'
 import LibraryView from './components/LibraryView'
 import ItemDetailView from './components/ItemDetailView'
 import SettingsView from './components/SettingsView'
-import { Columns3, User } from 'lucide-react'
+import { User } from 'lucide-react'
 
 function AppContent() {
   const [view, setView] = useState('dashboard')
@@ -41,9 +41,8 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-merino-50 max-w-lg mx-auto relative">
       <header className="flex justify-between items-center px-5 py-4 border-b border-merino-200 bg-merino-50">
-        <div className="flex items-center gap-2">
-          <Columns3 size={20} className="text-brand-700" />
-          <span className="text-sm font-semibold uppercase tracking-widest text-stone-800">Pliny</span>
+        <div className="rounded-sm dark:bg-[#FAF7F2] dark:px-1 dark:py-0.5">
+          <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Pliny" className="h-7 w-auto" />
         </div>
         <button
           onClick={() => setView('settings')}
