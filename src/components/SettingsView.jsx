@@ -236,7 +236,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.4 — No servers, no accounts. Your data stays on this device.</p>
+      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.5 — No servers, no accounts. Your data stays on this device.</p>
     </div>
   )
 }
