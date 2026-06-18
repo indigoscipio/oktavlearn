@@ -182,7 +182,7 @@ export default function DashboardView({ setView }) {
         </div>
       </div>
 
-      {recent.length > 0 && (
+      {recent.length > 0 ? (
         <>
           <h2 className="text-lg font-semibold text-stone-800 mb-2">Recently Studied</h2>
           <div className="flex flex-col gap-2">
@@ -196,7 +196,22 @@ export default function DashboardView({ setView }) {
             ))}
           </div>
         </>
-      )}
+      ) : activeItems.length > 0 ? (
+        <>
+          <h2 className="text-lg font-semibold text-stone-800 mb-2">Ready to Study</h2>
+          <p className="text-sm text-stone-500 mb-2">Log your first session for one of these active items.</p>
+          <div className="flex flex-col gap-2">
+            {activeItems.slice(0, 5).map((item) => (
+              <ItemCard
+                key={item.id}
+                item={item}
+                onSelect={(id) => setView(`item-${id}`)}
+                showDelete={false}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }
