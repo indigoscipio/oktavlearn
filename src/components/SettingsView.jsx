@@ -140,6 +140,9 @@ export default function SettingsView() {
       <div className="bg-merino-100 border border-merino-200 rounded-md p-4 mb-4">
         <h3 className="text-base font-semibold text-stone-800 mb-1">Export/Import Data</h3>
         <p className="text-sm text-stone-500 mb-3">Export a backup or restore a previous JSON file.</p>
+        <p className="text-sm text-stone-500 bg-merino-50 border border-merino-200 rounded-sm px-3 py-2 mb-3">
+          Importing replaces your current library and sessions. Export a backup first if you want to keep them.
+        </p>
         {!lastExportedAt && (
           <p className="text-sm text-gold-700 bg-gold-50 border border-gold-200 rounded-sm px-3 py-2 mb-3">
             You have not exported a backup yet. Pliny stores data only in this browser.
@@ -236,7 +239,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.5 — No servers, no accounts. Your data stays on this device.</p>
+      <p className="text-center text-xs text-stone-400 mt-6">Pliny v2.6.2 — No servers, no accounts. Your data stays on this device.</p>
     </div>
   )
 }

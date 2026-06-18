@@ -115,7 +115,7 @@ export default function DashboardView({ setView }) {
           required
           autoFocus
           disabled={activeItems.length === 0}
-          className="w-full px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 mb-2"
+          className="w-full px-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <option value="" disabled>{activeItems.length === 0 ? 'No active items' : 'Select item'}</option>
           {activeItems.map((item) => (
@@ -136,7 +136,7 @@ export default function DashboardView({ setView }) {
               onChange={(e) => setQuickDuration(e.target.value)}
               required
               disabled={activeItems.length === 0}
-              className="w-full pl-8 pr-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400"
+              className="w-full pl-8 pr-3 py-2 bg-white border border-merino-200 rounded-sm text-sm text-stone-800 placeholder:text-stone-400 disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
           <button

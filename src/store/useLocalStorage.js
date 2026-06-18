@@ -87,7 +87,7 @@ export function useLocalStorage() {
     const exportedAt = nowISO()
     save(LAST_EXPORT_KEY, exportedAt)
     setLastExportedAt(exportedAt)
-    return JSON.stringify({ version: '2.5', exportedAt, library, sessions }, null, 2)
+    return JSON.stringify({ version: '2.6.2', exportedAt, library, sessions }, null, 2)
   }, [library, sessions])
 
   const saveUserName = useCallback((name) => {

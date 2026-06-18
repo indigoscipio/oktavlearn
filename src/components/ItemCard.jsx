@@ -14,7 +14,15 @@ export default function ItemCard({ item, onSelect, showDelete = true }) {
   return (
     <div
       className="bg-merino-100 border border-merino-200 rounded-md p-4 cursor-pointer hover:shadow-md transition-shadow"
+      role="button"
+      tabIndex={0}
       onClick={() => onSelect(item.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(item.id)
+        }
+      }}
     >
       <div className="flex justify-between items-center mb-1">
         <span className="text-xs font-semibold uppercase tracking-wider text-brand-700">{item.type}</span>
@@ -24,6 +32,7 @@ export default function ItemCard({ item, onSelect, showDelete = true }) {
             <button
               className="text-stone-400 hover:text-brand-700 transition-colors p-0.5"
               title="Delete"
+              aria-label={`Delete ${item.title}`}
               onClick={(e) => {
                 e.stopPropagation()
                 if (confirm(`Delete "${item.title}" and its ${sessionLabel}? This cannot be undone.`)) deleteItem(item.id)
